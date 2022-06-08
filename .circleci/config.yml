@@ -1,0 +1,25 @@
+version: 2.1
+
+jobs:
+  build:	# 创建
+    working_directory: ~/circleci-python	# 工作目录
+    docker:	# 使用Docker
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout # 检查内容
+      - run: python3 main.py # 运行创建命令
+  test: # 测试
+    working_directory: ~/circleci-python
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout
+      - run: python3 main-test.py # 运行测试命令
+
+workflows: # 工作流程
+  build_and_test:	# 起的名字：创建并测试 
+    jobs:
+      - build 	
+      - test:	
+          requires: # 测试的前提是创建
+            - build
